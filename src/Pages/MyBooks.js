@@ -1,17 +1,21 @@
 import React from 'react'
 import BookShelf from "../Templates/BookShelf";
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-class MyBooksList extends React.Component {
-
+class MyBooks extends React.Component {
+    static propTypes = {
+        books: PropTypes.array.isRequired,
+        onBookChangeShelf: PropTypes.func.isRequired
+    };
     render() {
-        const { onBookChangeShelf } = this.props
+        const { onBookChangeShelf, books } = this.props
         const booksOnShelf = [
-            {id: 'read', books: []},
+            {id: 'currentlyReading', books: []},
             {id: 'wantToRead', books: []},
-            {id: 'currentlyReading', books: []}
+            {id: 'read', books: []}
         ]
-        this.props.books.forEach(book => booksOnShelf.find(shelf => shelf.id === book.shelf && shelf.books.push(book)))
+        books.forEach(book => booksOnShelf.find(shelf => shelf.id === book.shelf && shelf.books.push(book)))
 
         return (
             <div className="list-books">
@@ -21,7 +25,7 @@ class MyBooksList extends React.Component {
                 <div className="list-books-content">
                     <div>
                         {booksOnShelf.map(({id, books}) =>
-                            <BookShelf title={id} books={books} onBookChangeShelf={(book, shelf) => onBookChangeShelf(book, shelf)}/>
+                            <BookShelf key={id} title={id} books={books} onBookChangeShelf={(book, shelf) => onBookChangeShelf(book, shelf)}/>
                         )}
                     </div>
                 </div>
@@ -33,4 +37,4 @@ class MyBooksList extends React.Component {
     }
 }
 
-export default MyBooksList
+export default MyBooks
